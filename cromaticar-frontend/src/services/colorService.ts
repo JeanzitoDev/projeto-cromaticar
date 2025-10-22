@@ -18,9 +18,9 @@ export const colorService = {
     const queryParams = new URLSearchParams();
     
     if (params.query) queryParams.append('q', params.query);
-    if (params.montadora) queryParams.append('montadora', params.montadora);
-    if (params.modelo) queryParams.append('modelo', params.modelo);
-    if (params.ano) queryParams.append('ano', params.ano.toString());
+    if (params.id_montadora) queryParams.append('id_montadora', params.id_montadora.toString());
+    if (params.id_modelo) queryParams.append('id_modelo', params.id_modelo.toString());
+    if (params.id_ano) queryParams.append('id_ano', params.id_ano.toString());
     
     return api.get<Color[]>(`/colors/search?${queryParams}`);
   },
@@ -28,4 +28,4 @@ export const colorService = {
   async getPopularColors(): Promise<Color[]> {
     return api.get<Color[]>('/colors/popular');
   },
-};
+};  
