@@ -17,6 +17,14 @@ class DatabaseService:
             async with self.db_config.async_engine.connect() as conn:
                 result = await conn.execute(text("SELECT 1"))
                 return result.scalar() == 1
+        except ModuleNotFoundError as e:
+            # Erro comum em ambientes sem o driver asyncpg instalado
+            logger.error(
+                "Erro na conexão com o banco: driver async não encontrado.\n"
+                "Instale as dependências: python -m pip install asyncpg\n"
+                "ou: python -m pip install -r requirements.txt"
+            )
+            return False
         except Exception as e:
             logger.error(f"Erro na conexão com o banco: {e}")
             return False

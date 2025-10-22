@@ -1,6 +1,5 @@
 import React from 'react';
 import { Color } from '@/types/color';
-import { ColorCard } from './ColorCard';
 
 interface ColorGridProps {
   colors: Color[];
@@ -17,12 +16,13 @@ export const ColorGrid: React.FC<ColorGridProps> = ({
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {[...Array(8)].map((_, i) => (
-          <div key={i} className="card p-4 animate-pulse">
-            <div className="w-full h-32 bg-gray-300 rounded-lg mb-3"></div>
-            <div className="space-y-2">
-              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+          <div key={i} className="color-card animate-pulse">
+            <div className="color-preview">
+              <div className="color-sample bg-gray-300"></div>
+            </div>
+            <div className="color-info">
+              <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
               <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-              <div className="h-3 bg-gray-300 rounded w-2/3"></div>
             </div>
           </div>
         ))}
@@ -44,13 +44,26 @@ export const ColorGrid: React.FC<ColorGridProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="colors-grid">
       {colors.map((color) => (
-        <ColorCard
-          key={color.id}
-          color={color}
-          onView={onColorClick}
-        />
+        <div key={color.id_cor} className="color-card">
+          <div className="color-preview">
+            <div 
+              className="color-sample"
+              style={{ 
+                backgroundColor: `rgb(${color.rgb})`,
+                border: color.rgb === '255,255,255' ? '1px solid #E5E5E5' : 'none'
+              }}
+            />
+          </div>
+          <div className="color-info">
+            <h4 className="color-name">{color.nome_cor}</h4>
+            <div className="color-code">{color.codigo_cor}</div>
+            {color.rgb && (
+              <div className="color-rgb">RGB: {color.rgb}</div>
+            )}
+          </div>
+        </div>
       ))}
     </div>
   );
