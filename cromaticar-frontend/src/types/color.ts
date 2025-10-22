@@ -14,6 +14,10 @@ export interface Color {
   ano?: number;
   categoria?: string;
   codigoHex?: string;             // Sinônimo para rgb
+  // Alias camelCase para campos vindos do backend em snake_case
+  codigoCor?: string;             // alias para codigo_cor
+  nomeCor?: string;               // alias para nome_cor
+  idCor?: number;                 // alias para id_cor
 }
 
 export interface Brand {

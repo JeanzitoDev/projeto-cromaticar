@@ -35,7 +35,7 @@ export function useColors() {
   };
 }
 
-export function useColorById(id: string) {
+export function useColorById(id?: string | string[]) {
   const [color, setColor] = useState<Color | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,8 +44,21 @@ export function useColorById(id: string) {
     const fetchColor = async () => {
       try {
         setLoading(true);
-        const colorData = await colorService.getColorById(id);
-        setColor(colorData);
+        // normaliza id caso seja um array vindo do router
+        const rawId = Array.isArray(id) ? id[0] : id;
+        if (!rawId) return;
+
+        const colorData = await colorService.getColorById(rawId);
+        // Normalizar campos snake_case -> camelCase
+        const normalized: any = {
+          ...colorData,
+          // mapear nomes que o frontend espera
+          idCor: (colorData as any).id_cor ?? (colorData as any).id ?? undefined,
+          nome: (colorData as any).nome_cor ?? (colorData as any).nome ?? undefined,
+          codigoCor: (colorData as any).codigo_cor ?? (colorData as any).codigoCor ?? undefined,
+          codigoHex: (colorData as any).codigo_hex ?? (colorData as any).rgb ?? (colorData as any).codigoHex ?? undefined,
+        };
+        setColor(normalized as Color);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erro ao carregar cor');
       } finally {
@@ -55,6 +68,8 @@ export function useColorById(id: string) {
 
     if (id) {
       fetchColor();
+    } else {
+      setLoading(false);
     }
   }, [id]);
 

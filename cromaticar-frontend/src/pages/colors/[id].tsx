@@ -12,9 +12,10 @@ const ColorDetailPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   
-  const { color, loading, error } = useColorById(id as string);
+  const { color, loading, error } = useColorById(id as string | string[] | undefined);
 
-  const handleCopyCode = async (code: string) => {
+  const handleCopyCode = async (code?: string) => {
+    if (!code) return;
     await copyToClipboard(code);
     // Aqui você pode adicionar um toast de sucesso
     alert('Código copiado para a área de transferência!');
@@ -72,10 +73,10 @@ const ColorDetailPage: NextPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Preview da Cor */}
             <div className="space-y-6">
-              <div 
-                className="w-full h-96 rounded-2xl shadow-lg border border-border"
-                style={{ backgroundColor: color.codigoHex }}
-              />
+                    <div 
+                      className="w-full h-96 rounded-2xl shadow-lg border border-border"
+                      style={{ backgroundColor: color.codigoHex || color.rgb }}
+                    />
               
               <div className="grid grid-cols-2 gap-4">
                 <Button 
@@ -106,7 +107,7 @@ const ColorDetailPage: NextPage = () => {
                 </p>
               </div>
 
-              <div className="bg-surface rounded-xl p-6 border border-border space-y-4">
+        <div className="bg-surface rounded-xl p-6 border border-border space-y-4">
                 <h2 className="text-xl font-semibold text-text-primary mb-4">
                   Informações Técnicas
                 </h2>
@@ -118,7 +119,7 @@ const ColorDetailPage: NextPage = () => {
                     </label>
                     <div className="flex items-center gap-2">
                       <code className="bg-gray-100 px-3 py-2 rounded-lg font-mono text-lg">
-                        {color.codigoHex}
+                        {color.codigoHex || color.rgb}
                       </code>
                     </div>
                   </div>
